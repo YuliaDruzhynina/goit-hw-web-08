@@ -36,20 +36,13 @@ if __name__ == '__main__':
             for quote in quotes:
                 print("- {}".format(quote.quote))
         
-        elif command.startswith('author'):
-            author_name = command.split(' ', 1)[-1].strip()
+         elif command == 'author name':
+            author_name = input("Enter author's name: ")
             quotes = search_quotes_by_author(author_name)
-            print("Quotes by author '{author_name}':")#.format(author_name))
+            print(f"Quotes by author '{author_name}':")
             for quote in quotes:
                 print("- {}".format(quote.quote))
 
-        # elif command == 'author':
-        #     author_name = input("Enter author name: ")
-        #     quotes = search_quotes_by_author(author_name)
-        #     print("Quotes by author '{}':".format(author_name))
-        #     for quote in quotes:
-        #         print("- {}".format(quote.quote))
-                
         elif command == 'tags':
             tags = input("Enter tags separated by commas: ").split(',')
             quotes = search_quotes_by_tags(tags)
