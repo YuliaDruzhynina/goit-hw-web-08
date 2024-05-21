@@ -37,7 +37,8 @@ if __name__ == '__main__':
         channel.basic_publish(
             exchange='task_mock',
             routing_key='email_queue',
-            body=json.dumps(str(contact.id)),  # Преобразование ObjectID в строку для синхр с json и сериализация в JSON
+            body=str(contact.id),
+            #body=json.dumps(str(contact.id)),  # Преобразование ObjectID в строку для синхр с json и сериализация в JSON
             properties=pika.BasicProperties(
                 delivery_mode=pika.spec.PERSISTENT_DELIVERY_MODE
             )
