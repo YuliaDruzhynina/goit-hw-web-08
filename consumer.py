@@ -12,25 +12,15 @@ def main():
     connection = pika.BlockingConnection(
         pika.ConnectionParameters(host='localhost', port=5672, credentials=credentials))
     channel = connection.channel()
-
     channel.queue_declare(queue='email_queue', durable=True)
 
     
-    def callback(ch, method, properties, body):
-        contact_id_str = body.decode('utf-8').strip('"') 
-        try:
-            contact_id = ObjectId(contact_id_str)
-            contact = Contact.objects(id=contact_id).first()
-            if contact:
-                contact.email_sent = True
-                contact.save()
-                print(f"Updated contact {contact_id_str}")
-            else:
-                print(f"Contact with id {contact_id_str} not found")
-        except Exception as e:
-            print(f"Error converting body to ObjectId: {e}")
-
-        print(f"Received {body}")
+     def callback(ch, method, properties, body):
+        contact_id = body.decode()
+        contact = Contact.objects(id=contact_id, email_sent=False).first()
+        if contact:
+            contact.update(set__email_sent=True)
+        print(f"send email to contact id: {contact_id}, {contact.fullname}")
 
     #channel.basic_qos(prefetch_count=1)макс.кількість повідомлень, які споживач може взяти 
     channel.basic_consume(queue='email_queue', on_message_callback=callback, auto_ack=True)
