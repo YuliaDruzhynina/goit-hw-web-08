@@ -17,6 +17,7 @@ def main():
     
      def callback(ch, method, properties, body):
         contact_id = body.decode()
+        #contact_id = json.loads(body.decode())
         contact = Contact.objects(id=contact_id, email_sent=False).first()
         if contact:
             contact.update(set__email_sent=True)
